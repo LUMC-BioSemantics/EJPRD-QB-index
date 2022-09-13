@@ -11,3 +11,5 @@ services:
     hostname: ejprdindex
     ports:
       - 8000:8080
+    volumes:
+      - ./application.yml:/app/application.yml:ro
