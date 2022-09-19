@@ -1,8 +1,8 @@
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/catalogue/api/configuration/FDPIndexProperties.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/catalogue/api/configuration/SwaggerConfig.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/catalogue/api/controller/CataloguesController.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/catalogue/api/configuration/YamlPropertySourceFactory.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/catalogue/model/Catalogue.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/catalogue/api/controller/Application.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/catalogue/api/controller/converter/RDFInstanceListMessageConverter.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/catalogue/api/service/CataloguesService.java
+/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/configuration/YamlPropertySourceFactory.java
+/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/controller/Application.java
+/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/configuration/SwaggerConfig.java
+/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/model/Resource.java
+/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/service/ResourcesService.java
+/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/controller/converter/RDFInstanceListMessageConverter.java
+/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/controller/ResourcesController.java
+/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/configuration/FDPIndexProperties.java
