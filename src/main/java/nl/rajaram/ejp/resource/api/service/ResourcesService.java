@@ -125,13 +125,13 @@ public class ResourcesService {
 
                     if (theme.contentEquals(
                             "http://purl.obolibrary.org/obo/NCIT_C47846")) {
-                        List<String> catalogueType = resourceCopy.
-                                getResourceType();
-                        catalogueType.add("knowledge");
-                        resourceCopy.setResourceType(catalogueType);
+                        resourceCopy.getTheme().
+                                add("http://purl.org/ejp-rd/vocabulary/KnowledgeBase");
 
                     }                    
-                    resourceCopy.getTheme().add(theme);
+                    if(!resourceCopy.getTheme().contains(theme)){
+                        resourceCopy.getTheme().add(theme);
+                    }
                 }
             }
         }
@@ -173,8 +173,11 @@ public class ResourcesService {
                         catalogues.add(resource);
                         previousID = id;
                         resourceCopy = resource;
-                    }                   
-                    resourceCopy.getTheme().add(theme);
+                    }
+                    if(!resourceCopy.getTheme().contains(theme)){
+                        resourceCopy.getTheme().add(theme);
+                    }
+                    
                 }
             }
         }
@@ -195,8 +198,20 @@ public class ResourcesService {
         } else {
             resource.setLogo("");
         }
-        String uniqueID = UUID.randomUUID().toString();        
-        resource.setCreated(uniqueID);
+        
+        if (solution.getValue("home_page") != null) {
+            resource.setHomepage(solution.getValue("home_page").stringValue());
+        } else {
+            resource.setHomepage(resource.getId());
+        }
+        if (solution.getValue("created_time") != null) {
+            resource.setCreateDateTime(
+                    solution.getValue("created_time").stringValue());
+        }        
+        if (solution.getValue("updated_time") != null) {
+            resource.setUpdateDateTime(
+                    solution.getValue("updated_time").stringValue());
+        }
 
     }
 }

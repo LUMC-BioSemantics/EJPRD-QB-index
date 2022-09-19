@@ -33,6 +33,48 @@ import java.util.List;
 public class Resource {
 
     /**
+     * @return the createDateTime
+     */
+    public String getCreateDateTime() {
+        return createDateTime;
+    }
+
+    /**
+     * @param createDateTime the createDateTime to set
+     */
+    public void setCreateDateTime(String createDateTime) {
+        this.createDateTime = createDateTime;
+    }
+
+    /**
+     * @return the updateDateTime
+     */
+    public String getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    /**
+     * @param updateDateTime the updateDateTime to set
+     */
+    public void setUpdateDateTime(String updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
+
+    /**
+     * @return the homepage
+     */
+    public String getHomepage() {
+        return homepage;
+    }
+
+    /**
+     * @param homepage the homepage to set
+     */
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
+
+    /**
      * @return the theme
      */
     public List<String> getTheme() {
@@ -114,21 +156,7 @@ public class Resource {
      */
     public void setResourceAddress(String resourceAddress) {
         this.resourceAddress = resourceAddress;
-    }
-
-    /**
-     * @return the created
-     */
-    public String getCreated() {
-        return created;
-    }
-
-    /**
-     * @param created the created to set
-     */
-    public void setCreated(String created) {
-        this.created = created;
-    }
+    }    
 
     /**
      * @return the id
@@ -163,12 +191,16 @@ public class Resource {
     private String resourceAddress;
     
     private String resourceDescription;
-            
-    private String created;
     
     private String specsURL;
     
     private String logo;
+    
+    private String homepage;
+    
+    private String createDateTime;
+    
+    private String updateDateTime;
     
     @JsonProperty("_id")
     private String id;
