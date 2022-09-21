@@ -1,8 +1,0 @@
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/configuration/YamlPropertySourceFactory.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/controller/Application.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/configuration/SwaggerConfig.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/model/Resource.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/service/ResourcesService.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/controller/converter/RDFInstanceListMessageConverter.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/controller/ResourcesController.java
-/home/rajaram/work/ejp-rd/EJPRD-QB-index/src/main/java/nl/rajaram/ejp/resource/api/configuration/FDPIndexProperties.java

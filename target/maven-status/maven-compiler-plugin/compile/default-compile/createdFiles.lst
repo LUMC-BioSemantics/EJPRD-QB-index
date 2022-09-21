@@ -1,9 +1,0 @@
-nl/rajaram/ejp/resource/api/controller/Application.class
-nl/rajaram/ejp/resource/model/Resource.class
-nl/rajaram/ejp/resource/api/controller/ResourcesController.class
-nl/rajaram/ejp/resource/api/configuration/YamlPropertySourceFactory.class
-nl/rajaram/ejp/resource/api/service/ResourcesService.class
-nl/rajaram/ejp/resource/api/controller/Application$1.class
-nl/rajaram/ejp/resource/api/configuration/SwaggerConfig.class
-nl/rajaram/ejp/resource/api/controller/converter/RDFInstanceListMessageConverter.class
-nl/rajaram/ejp/resource/api/configuration/FDPIndexProperties.class
