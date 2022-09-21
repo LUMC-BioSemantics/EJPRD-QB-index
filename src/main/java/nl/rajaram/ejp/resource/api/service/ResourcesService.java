@@ -33,8 +33,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import nl.rajaram.ejp.resource.api.configuration.FDPIndexProperties;
 import nl.rajaram.ejp.resource.model.Resource;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQuery;
@@ -44,7 +42,7 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -64,8 +62,8 @@ public class ResourcesService {
     private final String GET_DISCOVERABLE_RESOURCES_QUERY
             = "list-discoverable-resources.rq";
 
-    @Autowired
-    private FDPIndexProperties fdpIndexProperties;
+    @Value("${fdp-index.triplestoreUrl}")
+    private String triplestoreUrl;
 
     public List<Resource> getCatalogues() throws IOException {
         LOGGER.info("Get all recources list");
@@ -81,8 +79,7 @@ public class ResourcesService {
         URL fileURL = ResourcesService.class.
                 getResource(GET_QUERYABLE_RESOURCES_QUERY);
         String queryString = Resources.toString(fileURL, Charsets.UTF_8);
-        Repository repository = new SPARQLRepository(fdpIndexProperties.
-                triplestoreUrl);
+        Repository repository = new SPARQLRepository(triplestoreUrl);
 
         try ( RepositoryConnection conn = repository.getConnection()) {
 
@@ -144,8 +141,7 @@ public class ResourcesService {
         URL fileURL = ResourcesService.class.
                 getResource(GET_DISCOVERABLE_RESOURCES_QUERY);
         String queryString = Resources.toString(fileURL, Charsets.UTF_8);
-        Repository repository = new SPARQLRepository(fdpIndexProperties.
-                triplestoreUrl);
+        Repository repository = new SPARQLRepository(triplestoreUrl);
 
         try ( RepositoryConnection conn = repository.getConnection()) {
 

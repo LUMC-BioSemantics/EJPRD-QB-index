@@ -30,18 +30,16 @@ package nl.rajaram.ejp.resource.api.controller;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.ParserConfigurationException;
 import nl.rajaram.ejp.resource.api.service.ResourcesService;
 import nl.rajaram.ejp.resource.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.xml.sax.SAXException;
 
 /**
  * Handle API calls related to resources
@@ -53,21 +51,16 @@ import org.xml.sax.SAXException;
 @RestController
 @RequestMapping("/resources")
 public class ResourcesController {
-    
     private static final Logger logger = LoggerFactory.getLogger(ResourcesController.class);
     
     @Autowired
-    private ResourcesService cataloguesService;   
+    private ResourcesService cataloguesService;
     
-    
-    @RequestMapping(value = "", method = RequestMethod.GET,
-            produces = {"application/json"})
+    @GetMapping(value = "", produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    public List<Resource> getResources(final HttpServletRequest request) throws IOException, 
-            ParserConfigurationException, SAXException, IllegalArgumentException {        
+    public List<Resource> getResources(final HttpServletRequest request) throws IOException, IllegalArgumentException {
         logger.info("Request to get resources");
         List<Resource> resources = cataloguesService.getCatalogues();
         return resources;
     }
-    
 }
