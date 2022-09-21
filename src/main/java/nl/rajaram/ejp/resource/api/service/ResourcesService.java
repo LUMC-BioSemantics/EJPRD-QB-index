@@ -30,10 +30,11 @@ package nl.rajaram.ejp.resource.api.service;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import nl.rajaram.ejp.resource.model.Resource;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryResults;
 import org.eclipse.rdf4j.repository.Repository;
@@ -41,7 +42,8 @@ import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.eclipse.rdf4j.repository.util.Repositories;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,45 +54,67 @@ import org.springframework.stereotype.Service;
  * @version 0.1
  */
 @Service
-public class ResourcesService {
+public class ResourcesService implements InitializingBean, DisposableBean {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesService.class);
+    private static final String QUERYABLE_RESOURCES_QUERY_STRING;
+    private static final String DISCOVERABLE_RESOURCES_QUERY_STRING;
 
-    private static final Logger LOGGER = LoggerFactory.
-            getLogger(ResourcesService.class);
-    private final String GET_QUERYABLE_RESOURCES_QUERY
-            = "list-queryable-resources.rq";
-    private final String GET_DISCOVERABLE_RESOURCES_QUERY
-            = "list-discoverable-resources.rq";
+    static {
+        try {
+            var fileURL = ResourcesService.class.getResource("list-queryable-resources.rq");
+            QUERYABLE_RESOURCES_QUERY_STRING = Resources.toString(fileURL, Charsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
 
-    @Value("${fdp-index.triplestoreUrl}")
-    private String triplestoreUrl;
-
-    public List<Resource> getCatalogues() throws IOException {
-        LOGGER.info("Get all recources list");
-        List<Resource> catalogues = getQueryableResources();
-        catalogues.addAll(getDiscoverableResources());
-
-        return catalogues;
+        try {
+            var fileURL = ResourcesService.class.getResource("list-discoverable-resources.rq");
+            DISCOVERABLE_RESOURCES_QUERY_STRING = Resources.toString(fileURL, Charsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
-    private List<Resource> getQueryableResources() throws IOException {
-        LOGGER.info("Get queryable recources list");
-        var catalogues = new ArrayList<Resource>();
-        URL fileURL = ResourcesService.class.
-                getResource(GET_QUERYABLE_RESOURCES_QUERY);
-        String queryString = Resources.toString(fileURL, Charsets.UTF_8);
-        Repository repository = new SPARQLRepository(triplestoreUrl);
+    @org.springframework.beans.factory.annotation.Value("${fdp-index.triplestoreUrl}")
+    private String triplestoreUrl;
 
-        var results = Repositories.tupleQueryNoTransaction(repository, queryString, QueryResults::asList);
+    private Repository repository;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        repository = new SPARQLRepository(triplestoreUrl);
+        repository.init();
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        repository.shutDown();
+    }
+
+    public List<Resource> getCatalogues() {
+        LOGGER.info("Get all resources list");
+
+        var resources = getQueryableResources();
+        resources.addAll(getDiscoverableResources());
+
+        return resources;
+    }
+
+    private List<Resource> getQueryableResources() {
+        LOGGER.info("Get queryable resources list");
+        var results = Repositories.tupleQueryNoTransaction(repository, QUERYABLE_RESOURCES_QUERY_STRING, QueryResults::asList);
+
+        var catalogues = new ArrayList<Resource>();
         var previousID = "";
-        var resourceCopy = (Resource)null;
+        Resource resourceCopy = null;
 
         for (var solution : results) {
-            String id = solution.getValue("resource").stringValue();
-            String theme = solution.getValue("theme").stringValue();
+            var id = solution.getValue("resource").stringValue();
+            var theme = solution.getValue("theme").stringValue();
 
             if (!previousID.contentEquals(id)) {
 
-                Resource resource = new Resource();
+                var resource = new Resource();
                 addCommonResourceProperties(resource, solution);
 
                 var type = new ArrayList<String>();
@@ -114,10 +138,8 @@ public class ResourcesService {
                 resourceCopy = resource;
             }
 
-            if (theme.contentEquals(
-                    "http://purl.obolibrary.org/obo/NCIT_C47846")) {
-                resourceCopy.getTheme().
-                        add("http://purl.org/ejp-rd/vocabulary/KnowledgeBase");
+            if ("http://purl.obolibrary.org/obo/NCIT_C47846".contentEquals(theme)) {
+                resourceCopy.getTheme().add("http://purl.org/ejp-rd/vocabulary/KnowledgeBase");
 
             }
             if(!resourceCopy.getTheme().contains(theme)){
@@ -128,27 +150,22 @@ public class ResourcesService {
         return catalogues;
     }
     
-    private List<Resource> getDiscoverableResources() throws IOException {
-        LOGGER.info("Get discoverable recources list");
-        var catalogues = new ArrayList<Resource>();
-        URL fileURL = ResourcesService.class.
-                getResource(GET_DISCOVERABLE_RESOURCES_QUERY);
-        String queryString = Resources.toString(fileURL, Charsets.UTF_8);
-        Repository repository = new SPARQLRepository(triplestoreUrl);
+    private List<Resource> getDiscoverableResources() {
+        LOGGER.info("Get discoverable resources list");
+        var results = Repositories.tupleQueryNoTransaction(repository, DISCOVERABLE_RESOURCES_QUERY_STRING, QueryResults::asList);
 
-        var results = Repositories.tupleQueryNoTransaction(repository, queryString, QueryResults::asList);
-        String previousID = "";
+        var catalogues = new ArrayList<Resource>();
+        var previousID = "";
         Resource resourceCopy = null;
 
         for (var solution : results) {
-            String id = solution.getValue("resource").stringValue();
-            String theme = solution.getValue("theme").stringValue();
-            String rtype = solution.getValue("resource_type")
-                    .stringValue();
+            var id = solution.getValue("resource").stringValue();
+            var theme = solution.getValue("theme").stringValue();
+            var rtype = solution.getValue("resource_type").stringValue();
 
             if (!previousID.contentEquals(id)) {
 
-                Resource resource = new Resource();
+                var resource = new Resource();
                 addCommonResourceProperties(resource, solution);
 
                 var type = new ArrayList<String>();
@@ -167,34 +184,29 @@ public class ResourcesService {
         return catalogues;
     }
     
-    private void addCommonResourceProperties(Resource resource,
-            BindingSet solution) {
-        
-        String name = solution.getValue("resource_name").stringValue();
-        resource.setResourceName(name);
-        if (solution.getValue("resource_description") != null) {
-            resource.setResourceDescription(
-                    solution.getValue("resource_description").stringValue());
-        }
-        if (solution.getValue("resource_logo") != null) {
-            resource.setLogo(solution.getValue("resource_logo").stringValue());
-        } else {
-            resource.setLogo("");
-        }
-        
-        if (solution.getValue("home_page") != null) {
-            resource.setHomepage(solution.getValue("home_page").stringValue());
-        } else {
-            resource.setHomepage(resource.getId());
-        }
-        if (solution.getValue("created_time") != null) {
-            resource.setCreateDateTime(
-                    solution.getValue("created_time").stringValue());
-        }        
-        if (solution.getValue("updated_time") != null) {
-            resource.setUpdateDateTime(
-                    solution.getValue("updated_time").stringValue());
-        }
+    private void addCommonResourceProperties(Resource resource, BindingSet solution) {
+        Optional.of(solution.getValue("resource_name"))
+                .map(Value::stringValue)
+                .ifPresent(resource::setResourceName);
 
+        Optional.ofNullable(solution.getValue("resource_description"))
+                .map(Value::stringValue)
+                .ifPresent(resource::setResourceDescription);
+
+        Optional.ofNullable(solution.getValue("resource_logo"))
+                .map(Value::stringValue)
+                .ifPresentOrElse(resource::setLogo, () -> resource.setLogo(""));
+
+        Optional.ofNullable(solution.getValue("home_page"))
+                .map(Value::stringValue)
+                .ifPresentOrElse(resource::setHomepage, () -> resource.setHomepage(resource.getId()));
+
+        Optional.ofNullable(solution.getValue("created_time"))
+                .map(Value::stringValue)
+                .ifPresent(resource::setCreateDateTime);
+
+        Optional.ofNullable(solution.getValue("updated_time"))
+                .map(Value::stringValue)
+                .ifPresent(resource::setUpdateDateTime);
     }
 }
