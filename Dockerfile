@@ -21,8 +21,13 @@
 # THE SOFTWARE.
 #
 
-FROM openjdk:8-jdk-alpine
-EXPOSE 8080
-ARG JAR_FILE=target/EJPRD-QB-index-0.1.0.jar
-ADD ${JAR_FILE} /app/app.jar
+FROM maven:3-eclipse-temurin-18 as builder
+WORKDIR /builder
+ADD . /builder
+RUN mvn --quiet --batch-mode --update-snapshots --fail-fast package
+
+FROM eclipse-temurin:18-jre-focal
+WORKDIR /app
+COPY --from=builder /builder/target/*.jar /app/app.jar
+COPY --from=builder /builder/application.yml /app/application.yml
 ENTRYPOINT java -jar /app/app.jar --spring.config.location=file:/app/application.yml
