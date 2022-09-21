@@ -35,11 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import nl.rajaram.ejp.resource.model.Resource;
 import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.query.TupleQuery;
-import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.query.QueryResults;
 import org.eclipse.rdf4j.repository.Repository;
-import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
+import org.eclipse.rdf4j.repository.util.Repositories;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,108 +74,96 @@ public class ResourcesService {
 
     private List<Resource> getQueryableResources() throws IOException {
         LOGGER.info("Get queryable recources list");
-        List<Resource> catalogues = new ArrayList();
+        var catalogues = new ArrayList<Resource>();
         URL fileURL = ResourcesService.class.
                 getResource(GET_QUERYABLE_RESOURCES_QUERY);
         String queryString = Resources.toString(fileURL, Charsets.UTF_8);
         Repository repository = new SPARQLRepository(triplestoreUrl);
 
-        try ( RepositoryConnection conn = repository.getConnection()) {
+        var results = Repositories.tupleQueryNoTransaction(repository, queryString, QueryResults::asList);
+        var previousID = "";
+        var resourceCopy = (Resource)null;
 
-            TupleQuery query = conn.prepareTupleQuery(queryString);
+        for (var solution : results) {
+            String id = solution.getValue("resource").stringValue();
+            String theme = solution.getValue("theme").stringValue();
 
-            String previousID = "";
-            Resource resourceCopy = null;
+            if (!previousID.contentEquals(id)) {
 
-            try ( TupleQueryResult result = query.evaluate()) {
-                while (result.hasNext()) {
-                    BindingSet solution = result.next();
-                    String id = solution.getValue("resource").stringValue();
-                    String theme = solution.getValue("theme").stringValue();
-                    
-                    if (!previousID.contentEquals(id)) {
-                        
-                        Resource resource = new Resource();
-                        addCommonResourceProperties(resource, solution);
-                        
-                        List<String> type = new ArrayList();
-                        type.add("http://www.w3.org/ns/dcat#Dataset");
-                        resource.setResourceType(type);
+                Resource resource = new Resource();
+                addCommonResourceProperties(resource, solution);
 
-                        if (solution.getValue("resource_endpoint") != null) {
-                            resource.setResourceAddress(
-                                    solution.getValue("resource_endpoint")
-                                            .stringValue());
-                        }
+                var type = new ArrayList<String>();
+                type.add("http://www.w3.org/ns/dcat#Dataset");
+                resource.setResourceType(type);
 
-                        if (solution.getValue("specs_iri") != null) {
-                            resource.setSpecsURL(
-                                    solution.getValue("specs_iri")
-                                            .stringValue());
-                        }
-                        resource.setId(id);
-                        catalogues.add(resource);
-                        previousID = id;
-                        resourceCopy = resource;
-                    }
-
-                    if (theme.contentEquals(
-                            "http://purl.obolibrary.org/obo/NCIT_C47846")) {
-                        resourceCopy.getTheme().
-                                add("http://purl.org/ejp-rd/vocabulary/KnowledgeBase");
-
-                    }                    
-                    if(!resourceCopy.getTheme().contains(theme)){
-                        resourceCopy.getTheme().add(theme);
-                    }
+                if (solution.getValue("resource_endpoint") != null) {
+                    resource.setResourceAddress(
+                            solution.getValue("resource_endpoint")
+                                    .stringValue());
                 }
+
+                if (solution.getValue("specs_iri") != null) {
+                    resource.setSpecsURL(
+                            solution.getValue("specs_iri")
+                                    .stringValue());
+                }
+                resource.setId(id);
+                catalogues.add(resource);
+                previousID = id;
+                resourceCopy = resource;
+            }
+
+            if (theme.contentEquals(
+                    "http://purl.obolibrary.org/obo/NCIT_C47846")) {
+                resourceCopy.getTheme().
+                        add("http://purl.org/ejp-rd/vocabulary/KnowledgeBase");
+
+            }
+            if(!resourceCopy.getTheme().contains(theme)){
+                resourceCopy.getTheme().add(theme);
             }
         }
+
         return catalogues;
     }
     
     private List<Resource> getDiscoverableResources() throws IOException {
         LOGGER.info("Get discoverable recources list");
-        List<Resource> catalogues = new ArrayList();
+        var catalogues = new ArrayList<Resource>();
         URL fileURL = ResourcesService.class.
                 getResource(GET_DISCOVERABLE_RESOURCES_QUERY);
         String queryString = Resources.toString(fileURL, Charsets.UTF_8);
         Repository repository = new SPARQLRepository(triplestoreUrl);
 
-        try ( RepositoryConnection conn = repository.getConnection()) {
+        var results = Repositories.tupleQueryNoTransaction(repository, queryString, QueryResults::asList);
+        String previousID = "";
+        Resource resourceCopy = null;
 
-            TupleQuery query = conn.prepareTupleQuery(queryString);
-            String previousID = "";
-            Resource resourceCopy = null;
+        for (var solution : results) {
+            String id = solution.getValue("resource").stringValue();
+            String theme = solution.getValue("theme").stringValue();
+            String rtype = solution.getValue("resource_type")
+                    .stringValue();
 
-            try ( TupleQueryResult result = query.evaluate()) {
-                while (result.hasNext()) {
-                    BindingSet solution = result.next();
-                    String id = solution.getValue("resource").stringValue();
-                    String theme = solution.getValue("theme").stringValue();
-                    String rtype = solution.getValue("resource_type")
-                            .stringValue();
+            if (!previousID.contentEquals(id)) {
 
-                    if (!previousID.contentEquals(id)) {                        
+                Resource resource = new Resource();
+                addCommonResourceProperties(resource, solution);
 
-                        Resource resource = new Resource();
-                        addCommonResourceProperties(resource, solution);
-                        
-                        List<String> type = new ArrayList();
-                        type.add(rtype);
-                        resource.setResourceType(type);
-                        resource.setId(id);
-                        catalogues.add(resource);
-                        previousID = id;
-                        resourceCopy = resource;
-                    }
-                    if(!resourceCopy.getTheme().contains(theme)){
-                        resourceCopy.getTheme().add(theme);
-                    }
-                    
-                }
+                var type = new ArrayList<String>();
+                type.add(rtype);
+                resource.setResourceType(type);
+                resource.setId(id);
+                catalogues.add(resource);
+                previousID = id;
+                resourceCopy = resource;
+            }
+            if(!resourceCopy.getTheme().contains(theme)){
+                resourceCopy.getTheme().add(theme);
             }
         }
+
         return catalogues;
     }
     
