@@ -88,9 +88,7 @@
                                 <exclude>**/*.xml</exclude>
                                 <exclude>**/*.ttl</exclude>
                                 <exclude>**/*.yml</exclude>
-                                <exclude>**/*.sparql</exclude>
-                                <exclude>**/*.properties</exclude>
-                                <exclude>**/log4j2.xml</exclude>
+                                <exclude>**/*.rq</exclude>
                             </excludes>
                         </licenseSet>
                     </licenseSets>
