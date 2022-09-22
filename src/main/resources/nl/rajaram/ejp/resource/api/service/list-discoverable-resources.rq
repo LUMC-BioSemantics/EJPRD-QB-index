@@ -10,14 +10,12 @@ SELECT DISTINCT ?resource ?resource_name ?resource_type ?created_time ?updated_t
     
     ?resource a ?resource_type;
               rdfs:label ?resource_name;
-              dcat:theme ?theme, ejprd:VPDiscoverable.
+              dcat:theme ?theme, ejprd:VPDiscoverable;              
+              fdp-o:metadataIssued ?created_time;
+              fdp-o:metadataModified ?updated_time.
     FILTER (?resource_type != dcat:Resource) 
     
-    OPTIONAL {
-        ?resource dct:description ?resource_description; 
-                        dcat:landingPage ?home_page;
-                        dct:publisher [foaf:logo ?resource_logo];
-                        fdp-o:metadataIssued ?created_time;
-                        fdp-o:metadataModified ?updated_time.
-    }
+    OPTIONAL {?resource dct:description ?resource_description}
+    OPTIONAL {?resource dcat:landingPage ?home_page}
+    OPTIONAL {?resource dct:publisher [foaf:logo ?resource_logo]}
 } ORDER BY ?resource
