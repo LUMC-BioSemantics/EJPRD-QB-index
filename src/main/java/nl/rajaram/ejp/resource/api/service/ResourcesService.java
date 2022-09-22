@@ -28,9 +28,10 @@
  */
 package nl.rajaram.ejp.resource.api.service;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,15 +64,17 @@ public class ResourcesService implements InitializingBean, DisposableBean {
     static {
         try {
             var fileURL = ResourcesService.class.getResource("list-queryable-resources.rq");
-            QUERYABLE_RESOURCES_QUERY_STRING = Resources.toString(fileURL, Charsets.UTF_8);
-        } catch (IOException e) {
+            var path = Paths.get(fileURL.toURI());
+            QUERYABLE_RESOURCES_QUERY_STRING = Files.readString(path);
+        } catch (URISyntaxException | IOException e) {
             throw new IllegalStateException(e);
         }
 
         try {
             var fileURL = ResourcesService.class.getResource("list-discoverable-resources.rq");
-            DISCOVERABLE_RESOURCES_QUERY_STRING = Resources.toString(fileURL, Charsets.UTF_8);
-        } catch (IOException e) {
+            var path = Paths.get(fileURL.toURI());
+            DISCOVERABLE_RESOURCES_QUERY_STRING = Files.readString(path);
+        } catch (URISyntaxException | IOException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -123,15 +126,11 @@ public class ResourcesService implements InitializingBean, DisposableBean {
                 resource.setResourceType(type);
 
                 if (solution.getValue("resource_endpoint") != null) {
-                    resource.setResourceAddress(
-                            solution.getValue("resource_endpoint")
-                                    .stringValue());
+                    resource.setResourceAddress(solution.getValue("resource_endpoint").stringValue());
                 }
 
                 if (solution.getValue("specs_iri") != null) {
-                    resource.setSpecsURL(
-                            solution.getValue("specs_iri")
-                                    .stringValue());
+                    resource.setSpecsURL(solution.getValue("specs_iri").stringValue());
                 }
                 resource.setId(id);
                 catalogues.add(resource);

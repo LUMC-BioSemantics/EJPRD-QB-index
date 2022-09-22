@@ -31,10 +31,8 @@
     </developers>
 
     <properties>
-        <guava.version>31.1-jre</guava.version>
         <java.version>18</java.version>
         <springdoc.version>1.6.11</springdoc.version>
-        <commons-io.version>2.11.0</commons-io.version>
         <rdf4j.version>4.2.0</rdf4j.version>
         <plugin.mavenlic.version>4.1</plugin.mavenlic.version>
     </properties>
@@ -43,25 +41,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>   
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
-        
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
             <artifactId>rdf4j-repository-sparql</artifactId>
