@@ -4,4 +4,4 @@ springfox:
       v2:
         host: localhost:8080 #qb-index.ejprd.semlab-leiden.nl
 fdp-index:
-  triplestoreUrl: http://178.63.49.197:7300/repositories/fdp-index #https://graphdb.ejprd.semlab-leiden.nl/repositories/fdp-index
+  triplestoreUrl: https://graphdb.ejprd.semlab-leiden.nl/repositories/fdp-index
