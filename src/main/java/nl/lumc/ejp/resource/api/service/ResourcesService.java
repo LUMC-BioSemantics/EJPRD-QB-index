@@ -156,7 +156,6 @@ public class ResourcesService implements InitializingBean, DisposableBean {
 
         for (var solution : results) {
             var id = solution.getValue("resource").stringValue();
-            var theme = solution.getValue("theme").stringValue();
             var rtype = solution.getValue("resource_type").stringValue();
 
             if (!previousID.contentEquals(id)) {
@@ -172,8 +171,12 @@ public class ResourcesService implements InitializingBean, DisposableBean {
                 previousID = id;
                 resourceCopy = resource;
             }
-            if(!resourceCopy.getTheme().contains(theme)){
-                resourceCopy.getTheme().add(theme);
+
+            if (solution.hasBinding("theme")) {
+                var theme = solution.getValue("theme").stringValue();
+                if (!resourceCopy.getTheme().contains(theme)) {
+                    resourceCopy.getTheme().add(theme);
+                }
             }
         }
 
