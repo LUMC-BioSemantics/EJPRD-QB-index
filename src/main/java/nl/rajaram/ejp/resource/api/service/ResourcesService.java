@@ -123,7 +123,7 @@ public class ResourcesService implements InitializingBean, DisposableBean {
 
                 var type = new ArrayList<String>();
                 type.add("http://www.w3.org/ns/dcat#Dataset");
-                resource.setResourceType(type);
+                resource.setResourceContentType(type);
 
                 if (solution.getValue("resource_endpoint") != null) {
                     resource.setResourceAddress(solution.getValue("resource_endpoint").stringValue());
@@ -170,7 +170,7 @@ public class ResourcesService implements InitializingBean, DisposableBean {
 
                 var type = new ArrayList<String>();
                 type.add(rtype);
-                resource.setResourceType(type);
+                resource.setResourceContentType(type);
                 resource.setId(id);
                 catalogues.add(resource);
                 previousID = id;

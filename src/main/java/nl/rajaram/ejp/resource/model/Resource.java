@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -176,15 +176,15 @@ public class Resource {
     /**
      * @return the resourceType
      */
-    public List<String> getResourceType() {
-        return resourceType;
+    public List<String> getResourceContentType() {
+        return resourceContentType;
     }
 
     /**
-     * @param resourceType the resourceType to set
+     * @param resourceContentType the resourceType to set
      */
-    public void setResourceType(List<String> resourceType) {
-        this.resourceType = resourceType;
+    public void setResourceContentType(List<String> resourceContentType) {
+        this.resourceContentType = resourceContentType;
     }
 
     private String resourceName;
@@ -206,7 +206,7 @@ public class Resource {
     @JsonProperty("_id")
     private String id;
 
-    private List<String> resourceType = new ArrayList();
+    private List<String> resourceContentType = new ArrayList();
 
     private List<String> theme = new ArrayList();
 }
