@@ -29,9 +29,7 @@
 package nl.lumc.ejp.resource.api.service;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,18 +61,16 @@ public class ResourcesService implements InitializingBean, DisposableBean {
 
     static {
         try {
-            var fileURL = ResourcesService.class.getResource("list-queryable-resources.rq");
-            var path = Paths.get(fileURL.toURI());
-            QUERYABLE_RESOURCES_QUERY_STRING = Files.readString(path);
-        } catch (URISyntaxException | IOException e) {
+            var stream = ResourcesService.class.getResourceAsStream("list-queryable-resources.rq");
+            QUERYABLE_RESOURCES_QUERY_STRING = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
         try {
-            var fileURL = ResourcesService.class.getResource("list-discoverable-resources.rq");
-            var path = Paths.get(fileURL.toURI());
-            DISCOVERABLE_RESOURCES_QUERY_STRING = Files.readString(path);
-        } catch (URISyntaxException | IOException e) {
+            var stream = ResourcesService.class.getResourceAsStream("list-discoverable-resources.rq");
+            DISCOVERABLE_RESOURCES_QUERY_STRING = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
     }

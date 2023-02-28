@@ -1,7 +1,0 @@
-springfox:
-  documentation:
-    swagger:
-      v2:
-        host: localhost:8080 #qb-index.ejprd.semlab-leiden.nl
-fdp-index:
-  triplestoreUrl: https://graphdb.ejprd.semlab-leiden.nl/repositories/fdp-index

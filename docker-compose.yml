@@ -1,15 +1,15 @@
 version: '3'
-
 services:
-  #  ejprdindex service
-  ejprdindex:
+  ejprd-qb-index:
     build:
       context: .
-      dockerfile: Dockerfile
-    image: ejprdindex
-    restart: always
-    hostname: ejprdindex
-    ports:
-      - 8000:8080
+    image: ejprd/qb-index
+    restart: unless-stopped
     volumes:
       - ./application.yml:/app/application.yml:ro
+    networks:
+      - proxy_net
+
+networks:
+  proxy_net:
+    external: true
