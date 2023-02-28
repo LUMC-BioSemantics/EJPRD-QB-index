@@ -26,13 +26,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.rajaram.ejp.resource.api.controller;
+package nl.lumc.ejp.resource.api.controller;
 
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import nl.rajaram.ejp.resource.api.service.ResourcesService;
-import nl.rajaram.ejp.resource.model.Resource;
+
+import nl.lumc.ejp.resource.api.service.ResourcesService;
+import nl.lumc.ejp.resource.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

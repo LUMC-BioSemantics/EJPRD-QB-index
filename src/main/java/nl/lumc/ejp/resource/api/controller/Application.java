@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package nl.rajaram.ejp.resource.api.controller;
+package nl.lumc.ejp.resource.api.controller;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"nl.rajaram.ejp.resource.api.*"})
+@ComponentScan(basePackages = {"nl.lumc.ejp.resource.api.*"})
 public class Application {
 
     public static void main(String[] args) {

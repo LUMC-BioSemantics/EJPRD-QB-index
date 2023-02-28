@@ -26,7 +26,7 @@
  * To change this template uploadFileToAgraphWorkFlow, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.rajaram.ejp.resource.api.service;
+package nl.lumc.ejp.resource.api.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -35,7 +35,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import nl.rajaram.ejp.resource.model.Resource;
+import nl.lumc.ejp.resource.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.QueryResults;
